@@ -8,7 +8,6 @@ class AcceptanceTest < Minitest::Test
 
   def run_server(port, app, &block)
     server = Notes::Web.new(app, Port: port, Host: 'localhost')
-    require "pry"
     thread = Thread.new { server.start } # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
     thread.abort_on_exception = true
     block.call
