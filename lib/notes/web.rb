@@ -2,25 +2,42 @@ require 'socket'
 
 class Notes
   class Web
-    attr_reader :app, :server_data
+    attr_reader :app, :server_data, :env, :server
+
     def initialize(app, server_data)
       @app = app
       @server_data = server_data
-      @server = nil
+      @server = TCPServer.new(server_data[:Host], server_data[:Port])
+      @env = {}
     end
 
     def start
-      app_data = []
+      socket = server.accept
+      app_data = app.call(env)
 
-      @server =  TCPServer.new(server_data[:Host], server_data[:Port])
-      app_data = @app.call(server_data)
-      @server.puts "POST /path #{app_data[0]}\r\n"
-      @server.puts app_data[1]
+      socket.puts "HTTP/1.1 #{app_data[0]}\r"
+      app_data[1].each do |key, value|
+        socket.puts "#{key}: #{value}\r"
+      end
 
+      socket.puts "\r"
+      socket.print app_data[2].join
+
+      socket2 = server.accept
+      app_data = app.call(env)
+
+      socket2.puts "HTTP/1.1 #{app_data[0]}\r"
+      app_data[1].each do |key, value|
+        socket2.puts "#{key}: #{value}\r"
+      end
+
+      socket2.puts "\r"
+      socket2.print app_data[2].join
+      socket2.close
+      server.close
     end
 
     def stop
-      @server.close
     end
   end
 end

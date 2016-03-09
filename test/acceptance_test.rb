@@ -33,7 +33,6 @@ class AcceptanceTest < Minitest::Test
     end
   end
 
-
   def test_it_handles_multiple_requests
     app = Proc.new { |env_hash| [200, {'Content-Type' => 'text/plain'}, []] }
 
@@ -42,7 +41,6 @@ class AcceptanceTest < Minitest::Test
       assert_equal "200", Net::HTTP.get_response('localhost', '/', port).code
     end
   end
-
 
   def test_it_starts_on_the_specified_port
     other_port = 9293
