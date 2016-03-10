@@ -8,14 +8,14 @@ class Notes
       @app = app
       @server_data = server_data
       @server = TCPServer.new(server_data[:Host], server_data[:Port])
-      @env = {}
     end
 
     def start
       socket = server.accept
       stuff = socket.readlines
 
-      parse_request(stuff)
+      env = {}
+      parse_request(request, env)
 
       app_data = app.call(env)
 
@@ -29,7 +29,7 @@ class Notes
       socket.close
     end
 
-    def parse_request(request)
+    def parse_request(request, env)
       env.store("Path_Info", request.shift.chomp)
       body = request.pop
       if body != "\r\n"
