@@ -12,8 +12,8 @@ class AcceptanceTest < Minitest::Test
     thread.abort_on_exception = true
     block.call
   ensure
-    thread.kill
-    server.stop
+    thread.kill if thread
+    server.stop if server
   end
 
   def test_it_accepts_and_responds_to_a_web_request
@@ -30,6 +30,7 @@ class AcceptanceTest < Minitest::Test
       assert_equal "200",              response.code
       assert_equal 'bbq',              response.header['omg']
       assert_equal "hello, class ^_^", response.body
+      refute_equal "this value should be overridden by the app!", path_info
     end
   end
 
