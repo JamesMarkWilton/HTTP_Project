@@ -43,6 +43,7 @@ class AcceptanceTest < Minitest::Test
     end
   end
 
+  meta me: true
   def test_it_starts_on_the_specified_port
     other_port = 9293
     app = Proc.new do |env_hash|

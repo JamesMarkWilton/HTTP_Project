@@ -2,7 +2,7 @@ require 'socket'
 
 class Notes
   class Web
-    attr_accessor :app, :server_data, :env, :server
+    attr_accessor :app, :server_data, :server
 
     def initialize(app, server_data)
       @app = app
@@ -11,40 +11,45 @@ class Notes
     end
 
     def start
-      socket = server.accept
-      stuff = socket.readlines
+      loop do
+        socket = server.accept
+        response = app.call(parse_request(socket))
+        write_response(response, socket)
+        socket.close
+      end
+    end
 
-      env = {}
-      parse_request(request, env)
-
-      app_data = app.call(env)
-
-      socket.puts "HTTP/1.1 #{app_data[0]}\r"
-      app_data[1].each do |key, value|
+    def write_response(response, socket)
+      socket.puts "HTTP/1.1 #{response[0]}\r"
+      response[1].each do |key, value|
         socket.puts "#{key}: #{value}\r"
       end
 
       socket.puts "\r"
-      socket.print app_data[2].join
-      socket.close
+      socket.print response[2].join
+      socket.puts
     end
 
-    def parse_request(request, env)
-      env.store("Path_Info", request.shift.chomp)
-      body = request.pop
-      if body != "\r\n"
-        env.store("body", body)
-      end
+    def parse_request(socket)
+      env = {}
+      request = []
 
-      headers = {}
-      request.each do |element|
-        if element != "\r\n"
-          data = element.chomp.split ": "
-          headers.store(data[0], data[1])
-        end
+      socket.gets.split (" ")
+      require "pry"
+      binding.pry
+      env.store("Path_Info", socket.gets.chomp)
+      until request[-1] == "\r\n"
+        request << socket.gets
       end
+      request.pop
 
-      env.store("headers", headers)
+      request.each do |headers|
+        kv_pairs = headers.chomp.split ": "
+        kv_pairs[0].upcase
+        env.store(kv_pairs[0], kv_pairs[1])
+      end
+      env.store("body", socket.read(env["CONTENT_LENGTH"].to_i))
+      env
     end
 
     def stop
