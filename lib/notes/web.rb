@@ -13,7 +13,7 @@ class Notes
     def start
       loop do
         socket = server.accept
-        response = app.call(get_request(socket))
+        response = app.call(Notes::Web.get_request(socket))
         write_response(response, socket)
         socket.close
       end
@@ -30,18 +30,18 @@ class Notes
       socket.puts
     end
 
-    def get_request(socket)
+    def self.get_request(socket)
       request = []
       until request[-1] == "\r\n"
         request << socket.gets
       end
 
-      env = parse_request(request)
+      env = Notes::Web.parse_request(request)
       env.store("BODY", socket.read(env["CONTENT_LENGTH"].to_i))
       env
     end
 
-    def parse_request(request)
+    def self.parse_request(request)
       env = {}
       i = 0
 
