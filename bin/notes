@@ -1,0 +1,35 @@
+#!/usr/bin/env ruby
+
+$LOAD_PATH.unshift File.expand_path("../../lib", __FILE__)
+require 'notes'
+
+selectors = ARGV
+
+notes = [
+  { "description" => "Add 1 to 2", "example" => "1 + 2  # => 3"},
+  { "description" => "Subtract 5 from 2", "example" => "2 - 5  # => -3"},
+  { "description" => "Is 1 less than 2", "example" => "1 < 2"},
+  { "description" => "Is 1 equal to 2", "example" => "1 == 2 # => 3"},
+  { "description" => "Is 1 greater than 2", "example" => "1 > 2"},
+  { "description" => "Is 1 less than or equal to 2", "example" => "1 <= 2 # => 3"},
+  { "description" => "Is 1 greater than or equal to 2", "example" => "1 >= 2"},
+  { "description" => "Convert 1 to a float", "example" => "1.to_f # => 3"},
+  { "description" => "Concatenate two arrays", "example" => "[1,2] + [2, 3]"},
+  { "description" => "Remove elements in second array from first", "example" => "[1,2,4] - [2, 3] # => [1,4]"},
+  { "description" => "Access an element in an array by its index", "example" =>  "[\"a\",\"b\",\"c\"][0]"},
+  { "description" => "Find out how big the array is",    "example" => "[\"a\",\"b\"].length # => 2"}
+]
+
+if selectors && selectors[0] == "-h"
+  puts "Purpose : Searches notes files for specific keywords\nUsage: notes [selectors]"
+else
+  final = find_notes(notes, selectors)
+
+    if final.length > 0
+      find_notes(notes, selectors).each do |note|
+        printf "%-60s %-20s\n", "\e[33m#{note["description"]}\e[0m",   "\e[35m#{note["example"]}\e[0m"
+      end
+    else
+      $stderr.puts "Your search yielded no results. Please try again!"
+    end
+end

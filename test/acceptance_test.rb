@@ -1,22 +1,35 @@
-require 'notes/web' # <-- you'll need to make this
+require 'notes/server' # <-- you'll need to make this
 require 'net/http'  # this is from the stdlib
+require 'open3'
 
-class AcceptanceTest < Minitest::Test
+class Server_AcceptanceTest < Minitest::Test
   def port
     9292
   end
 
   def run_server(port, app, &block)
-    server = Notes::Web.new(app, Port: port, Host: 'localhost')
-    thread = Thread.new { server.start } # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
-    thread.abort_on_exception = true
+    server = Notes::Server.new(app, Port: port, Host: 'localhost')
+    # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
+    thread = Thread.new do
+      Thread.current.abort_on_exception = true
+      server.start
+    end
+    wait_for thread
     block.call
   ensure
     thread.kill if thread
     server.stop if server
   end
 
-  def test_it_accepts_and_responds_to_a_web_request
+  def wait_for(thread)
+    loop do
+      break if thread.status == 'sleep' #it is ready for our request
+      raise "The iserver finished without waiting for our request." unless thread.status
+      Thread.pass
+    end
+  end
+
+  def test_accepts_and_responds_to_a_web_request
     path_info = "this value should be overridden by the app!"
 
     app = Proc.new do |env_hash|
@@ -34,7 +47,7 @@ class AcceptanceTest < Minitest::Test
     end
   end
 
-  def test_it_handles_multiple_requests
+  def test_handles_multiple_requests
     app = Proc.new { |env_hash| [200, {'Content-Type' => 'text/plain'}, []] }
 
     run_server port, app do
@@ -43,8 +56,7 @@ class AcceptanceTest < Minitest::Test
     end
   end
 
-  meta me: true
-  def test_it_starts_on_the_specified_port
+  def test_starts_on_the_specified_port
     other_port = 9293
     app = Proc.new do |env_hash|
       [ 200,
@@ -56,5 +68,17 @@ class AcceptanceTest < Minitest::Test
     run_server other_port, app do
       assert_equal 'hello', Net::HTTP.get_response('localhost', '/', other_port).body
     end
+  end
+end
+
+
+class Notes_AcceptanceTest < Minitest::Test
+  def test_notes_app_runs
+    notes_program = File.expand_path('../../bin/notes', __FILE__)
+    stdout, stderr, exitstatus = Open3.capture3(notes_program)
+    assert_match /.*float.*1\.to_f/, stdout
+
+    stdout, stderr, exitstatus = Open3.capture3(notes_program, "-h")
+    assert_match /Purpose.*/, stdout
   end
 end
