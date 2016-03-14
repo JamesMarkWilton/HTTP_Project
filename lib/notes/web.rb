@@ -38,6 +38,7 @@ class Notes
 
       env = parse_request(request)
       env.store("BODY", socket.read(env["CONTENT_LENGTH"].to_i))
+      env
     end
 
     def parse_request(request)

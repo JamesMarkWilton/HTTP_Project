@@ -5,7 +5,9 @@ form =
   "<HTML>
     <body>
       <form>
-        <input type="text" name="query"><br>
+        <form action="action_page.php" method="get">
+        <p><input type="text" name="query"><br>,</p>
+        <p><input type="submit" value="Submit"></p>
       </form>
     </body>
 </HTML>"
