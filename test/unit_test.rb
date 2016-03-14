@@ -3,7 +3,7 @@ require 'notes/web'
 require 'stringio'
 
 class UnitTest < Minitest::Test
-  def test_parses_into_env_hash
+  def test_parses_request_into_env_hash
     request = ["GPPD /path HTTP/1.1\r\n",
               "Content-Type: text/html\r\n",
               "Content-length: 3\r\n",
@@ -15,7 +15,7 @@ class UnitTest < Minitest::Test
     assert_equal "text/html", env["CONTENT_TYPE"]
   end
 
-  def test_it_does_not_read_past_last_char
+  def test_does_not_read_past_last_char_of_request
     socket = StringIO.new("GPPD /path HTTP/1.1\r\nContent-Type: text/html\r\nContent-length: 3\r\n\r\nHI!")
     env = Notes::Web.get_request(socket)
 
