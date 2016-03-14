@@ -1,8 +1,7 @@
-require 'app'
 require_relative 'web'
 
 form =
-  "<HTML>
+  '<HTML>
     <body>
       <form>
         <form action="action_page.php" method="get">
@@ -10,13 +9,16 @@ form =
         <p><input type="submit" value="Submit"></p>
       </form>
     </body>
-</HTML>"
+</HTML>'
 
 app = Proc.new do |env_hash|
+  require "pry"
+  binding.pry
       env_hash['PATH_INFO'] = "/search"
       env_hash.store("QUERY_STRING", "query=array add")
       env_hash["BODY"] = form
     end
 
-
-end
+server = Notes::Web.new(app, Host: 'localhost', Port:4233)
+server.start
+server.stop

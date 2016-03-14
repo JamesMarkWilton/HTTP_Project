@@ -1,4 +1,5 @@
 require 'socket'
+require 'stringio'
 
 class Notes
   class Web
@@ -37,7 +38,8 @@ class Notes
       end
 
       env = Notes::Web.parse_request(request)
-      env.store("BODY", socket.read(env["CONTENT_LENGTH"].to_i))
+      body = socket.read(env["CONTENT_LENGTH"].to_i)
+      env.store("rack.input", StringIO.new(body))
       env
     end
 
@@ -46,9 +48,9 @@ class Notes
       i = 0
 
       request_line = request.shift.split(" ")
-      env.store("REQUEST_TYPE", request_line[0])
+      env.store("REQUEST_METHOD", request_line[0])
       env.store("PATH_INFO", request_line[1])
-      env.store("REQUEST_LANG/VERSION", request_line[2])
+      env.store("SERVER_PROTOCOL", request_line[2])
 
       until request[i] == "\r\n"
         kv_pair = request[i].chomp.split(": ")
@@ -61,7 +63,10 @@ class Notes
 
         i += 1
       end
-
+      server_data = env["HTTP_HOST"].split(":")
+      env.store("SERVER_NAME", server_data[0])
+      env.store("SERVER_PORT", server_data[1])
+      env.store("REQUEST_URI", "http://#{env["HTTP_HOST"]}")
       env
     end
 
