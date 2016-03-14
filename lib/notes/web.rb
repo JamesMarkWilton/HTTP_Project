@@ -13,7 +13,7 @@ class Notes
     def start
       loop do
         socket = server.accept
-        response = app.call(get_and_parse(socket))
+        response = app.call(get_request(socket))
         write_response(response, socket)
         socket.close
       end
@@ -30,7 +30,7 @@ class Notes
       socket.puts
     end
 
-    def get_and_parse(socket)
+    def get_request(socket)
       request = []
       until request[-1] == "\r\n"
         request << socket.gets
@@ -61,7 +61,6 @@ class Notes
 
         i += 1
       end
-      request.pop
 
       env
     end

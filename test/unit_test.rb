@@ -17,7 +17,7 @@ class UnitTest < Minitest::Test
 
   def test_it_does_not_read_past_last_char
     socket = StringIO.new("GPPD /path HTTP/1.1\r\nContent-Type: text/html\r\nContent-length: 3\r\n\r\nHI!")
-    env = Notes::Web.get_and_parse(socket)
+    env = Notes::Web.get_request(socket)
 
     assert_equal "HI!", env["BODY"]
     assert_equal nil, env["BODY"][4]
