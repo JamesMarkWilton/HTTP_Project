@@ -13,7 +13,7 @@ class Notes
     def start
       loop do
         socket = server.accept
-        response = app.call(parse_request(socket))
+        response = app.call(get_and_parse(socket))
         write_response(response, socket)
         socket.close
       end
@@ -30,25 +30,38 @@ class Notes
       socket.puts
     end
 
-    def parse_request(socket)
-      env = {}
+    def get_and_parse(socket)
       request = []
-
-      socket.gets.split (" ")
-      require "pry"
-      binding.pry
-      env.store("Path_Info", socket.gets.chomp)
       until request[-1] == "\r\n"
         request << socket.gets
       end
+
+      env = parse_request(request)
+      env.store("BODY", socket.read(env["CONTENT_LENGTH"].to_i))
+    end
+
+    def parse_request(request)
+      env = {}
+      i = 0
+
+      request_line = request.shift.split(" ")
+      env.store("REQUEST_TYPE", request_line[0])
+      env.store("PATH_INFO", request_line[1])
+      env.store("REQUEST_LANG/VERSION", request_line[2])
+
+      until request[i] == "\r\n"
+        kv_pair = request[i].chomp.split(": ")
+
+        if kv_pair[0][/content/i]
+          env.store("#{kv_pair[0].upcase.gsub "-", "_"}", kv_pair[1])
+        else
+          env.store("HTTP_#{kv_pair[0].upcase.gsub "-", "_"}", kv_pair[1])
+        end
+
+        i += 1
+      end
       request.pop
 
-      request.each do |headers|
-        kv_pairs = headers.chomp.split ": "
-        kv_pairs[0].upcase
-        env.store(kv_pairs[0], kv_pairs[1])
-      end
-      env.store("body", socket.read(env["CONTENT_LENGTH"].to_i))
       env
     end
 
