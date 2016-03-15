@@ -1,5 +1,6 @@
 require 'minitest'
 require 'notes/server'
+require 'notes/app'
 require 'stringio'
 require 'notes'
 
@@ -43,6 +44,13 @@ class ServerTest < Minitest::Test
     Notes::Server.write_response(response, socket)
 
     assert_equal "HTTP/1.1 200\r\nHead: 1\r\n\r\nHI!", socket.string
+  end
+
+  def test_app_returns_response_array
+    response = Notes::App.call(salutation: "Hi")
+    assert_equal 200,  response[0]
+    assert_equal "Hi", response[1][:salutation]
+    assert_match /<HTML>.*/, response[2][0]
   end
 end
 
