@@ -1,6 +1,7 @@
 GEM
   remote: http://rubygems.org/
   specs:
+    ast (2.2.0)
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
     coderay (1.1.0)
@@ -12,16 +13,28 @@ GEM
       minitest (~> 5.0)
       rspec-core (~> 3.2)
       what_weve_got_here_is_an_error_to_communicate (~> 0.0.8)
+    parser (2.3.0.6)
+      ast (~> 2.2)
+    powerpack (0.1.1)
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    rainbow (2.1.0)
     rake (10.4.2)
     rouge (1.10.1)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    rubocop (0.38.0)
+      parser (>= 2.3.0.6, < 3.0)
+      powerpack (~> 0.1)
+      rainbow (>= 1.99.1, < 3.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (~> 1.0, >= 1.0.1)
+    ruby-progressbar (1.7.5)
     slop (3.6.0)
+    unicode-display_width (1.0.2)
     what_weve_got_here_is_an_error_to_communicate (0.0.8)
       binding_of_caller (~> 0.7.2)
       interception (~> 0.5)
@@ -34,6 +47,7 @@ DEPENDENCIES
   mrspec (= 0.3.1)
   pry (= 0.10.1)
   rake (= 10.4.2)
+  rubocop (= 0.38.0)
 
 BUNDLED WITH
    1.11.2

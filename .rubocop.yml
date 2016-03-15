@@ -1,0 +1,230 @@
+# Save this in ".rubocop.yml" in your project root
+# https://github.com/bbatsov/rubocop/tree/master/config
+
+AllCops:
+  Exclude:
+    - 'tmp/**/*'
+  DefaultFormatter: progress
+  DisplayCopNames: true
+  DisplayStyleGuide: true
+  ExtraDetails: true
+  TargetRubyVersion: 2.3
+
+Style/Proc:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/Encoding:
+  Enabled: true
+
+Style/EmptyLiteral:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  EnforcedStyle: always
+
+# Indent private/protected/public as deep as method definitions
+Style/AccessModifierIndentation:
+  EnforcedStyle: indent
+
+# Don't care whether you use alias or alias_method
+Style/Alias:
+  Enabled: false
+
+# Align the elements of a hash literal if they span more than one line.
+Style/AlignHash:
+  # Hash Rockets:
+  #   'a'  => 2
+  #   'bb' => 3
+  # Colon Style:
+  #   a:  0
+  #   bb: 1
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: tabl
+  EnforcedLastArgumentHashStyle: always_ignore
+
+Style/AlignParameters:
+  EnforcedStyle: with_first_parameter
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+Style/BarePercentLiterals:
+  Enabled: false
+
+Style/BracesAroundHashParameters:
+  EnforcedStyle: no_braces
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: nested
+
+Style/ClassCheck:
+  Enabled: false
+
+Style/CommandLiteral:
+  Enabled: false
+
+Style/Copyright:
+  Enabled: false
+
+Style/DotPosition:
+  EnforcedStyle: leading
+
+Style/EmptyElse:
+  EnforcedStyle: both
+
+Style/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
+Style/EmptyLinesAroundBlockBody:
+  EnforcedStyle: no_empty_lines
+
+Style/EmptyLinesAroundMethodBody:
+  Enabled: false
+
+Style/Encoding:
+  EnforcedStyle: when_needed
+
+Style/FormatString:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/IndentArray:
+  EnforcedStyle: consistent
+
+Style/LambdaCall:
+  Enabled: false
+
+Style/NonNilCheck:
+  IncludeSemanticChanges: true
+
+Style/MethodDefParentheses:
+  Enabled: false
+
+Style/ParenthesesAroundCondition:
+  AllowSafeAssignment: true
+
+Style/PercentQLiterals:
+  Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
+
+Style/RedundantReturn:
+  Enabled: false
+
+Style/RegexpLiteral:
+  Enabled: false
+
+Style/SingleLineBlockParams:
+  Methods:
+    - reduce:
+        - a
+        - e
+    - inject:
+        - a
+        - e
+
+Style/SingleLineMethods:
+  AllowIfMethodIsEmpty: true
+
+Style/SpaceBeforeFirstArg:
+  AllowForAlignment: true
+
+Style/SpecialGlobalVars:
+  EnforcedStyle: use_english_names
+
+Style/StabbyLambdaParentheses:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/StringLiteralsInInterpolation:
+  Enabled: false
+
+Style/SpaceAroundBlockParameters:
+  EnforcedStyleInsidePipes: no_space
+
+Style/SpaceAroundEqualsInParameterDefault:
+  EnforcedStyle: space
+
+Style/SpaceAroundOperators:
+  AllowForAlignment: true
+
+Style/SpaceBeforeBlockBraces:
+  EnforcedStyle: space
+
+Style/SpaceInsideBlockBraces:
+  EnforcedStyle: space
+
+Style/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Style/TrailingCommaInArguments:
+  Enabled: false
+
+Style/TrailingCommaInLiteral:
+  Enabled: false
+
+Style/WhileUntilModifier:
+  MaxLineLength: 80
+
+Style/WordArray:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 15
+
+Metrics/BlockNesting:
+  Max: 3
+
+Metrics/ClassLength:
+  Max: 150
+
+Metrics/ModuleLength:
+  Max: 150
+
+Metrics/CyclomaticComplexity:
+  Max: 6
+
+Metrics/LineLength:
+  Max: 100
+
+Metrics/ParameterLists:
+  Max: 5
+  CountKeywordArgs: true
+
+Metrics/PerceivedComplexity:
+  Max: 7
+
+Lint/EndAlignment:
+  AlignWith: variable
+
+Lint/UnusedBlockArgument:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 15
+
+Style/PerlBackrefs:
+  Enabled: false
+
+Performance/StringReplacement:
+  Enabled: false
+
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/SpaceInsideBrackets:
+  Enabled: false
+
+Performance/RedundantBlockCall:
+  Enabled: false
+
+Style/SpaceAroundEqualsInParameterDefault:
+  Enabled: false
