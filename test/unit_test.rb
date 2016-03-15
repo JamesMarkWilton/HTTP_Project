@@ -52,6 +52,20 @@ class ServerTest < Minitest::Test
     assert_equal "Hi", response[1][:salutation]
     assert_match /<HTML>.*/, response[2][0]
   end
+
+  def test_app_returns_searched_notes
+    response = Notes::App.call(QUERY_STRING: "query=1", salutation: "Hi", NOTES: [{"description" => "Number", "example" => "1"}, {"description" => "Letter", "example" => "A"}])
+    assert_match /.*Number.*/, response[2][0]
+    refute_match /.*Letter.*/, response[2][0]
+
+    response = Notes::App.call(QUERY_STRING: "query=A", salutation: "Hi", NOTES: [{"description" => "Number", "example" => "1"}, {"description" => "Letter", "example" => "A"}])
+    refute_match /.*Number.*/, response[2][0]
+    assert_match /.*Letter.*/, response[2][0]
+
+    response = Notes::App.call(QUERY_STRING: "", salutation: "Hi", NOTES: [{"description" => "Number", "example" => "1"}, {"description" => "Letter", "example" => "A"}])
+    assert_match /.*Number.*/, response[2][0]
+    assert_match /.*Letter.*/, response[2][0]
+  end
 end
 
 class NotesTest < Minitest::Test

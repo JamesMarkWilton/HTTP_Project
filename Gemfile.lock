@@ -3,18 +3,25 @@ GEM
   specs:
     binding_of_caller (0.7.2)
       debug_inspector (>= 0.0.1)
+    coderay (1.1.0)
     debug_inspector (0.0.2)
     interception (0.5)
+    method_source (0.8.2)
     minitest (5.8.4)
     mrspec (0.3.1)
       minitest (~> 5.0)
       rspec-core (~> 3.2)
       what_weve_got_here_is_an_error_to_communicate (~> 0.0.8)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rake (10.4.2)
     rouge (1.10.1)
     rspec-core (3.4.4)
       rspec-support (~> 3.4.0)
     rspec-support (3.4.1)
+    slop (3.6.0)
     what_weve_got_here_is_an_error_to_communicate (0.0.8)
       binding_of_caller (~> 0.7.2)
       interception (~> 0.5)
@@ -25,6 +32,7 @@ PLATFORMS
 
 DEPENDENCIES
   mrspec (= 0.3.1)
+  pry (= 0.10.1)
   rake (= 10.4.2)
 
 BUNDLED WITH
