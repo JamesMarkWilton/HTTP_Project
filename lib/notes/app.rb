@@ -20,14 +20,12 @@ notes = [
 
   App = Proc.new do |env_hash|
     if env_hash["QUERY_STRING"]
-      found = nil
+      found = notes
 
-      if env_hash["QUERY_STRING"] == ""
+      if env_hash["QUERY_STRING"] != ""
         query = env_hash["QUERY_STRING"].split("=")
-        selectors = query[1].gsub("+", " ").split(" ")
-        found = find_notes(notes, selectors)
-      else
-        found = notes
+        selectors = query[1].tr "+", " "
+        found = find_notes(notes, selectors.split(" "))
       end
 
       list = []
