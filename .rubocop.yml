@@ -4,6 +4,7 @@
 AllCops:
   Exclude:
     - 'tmp/**/*'
+    - 'vendor/**/*'
   DefaultFormatter: progress
   DisplayCopNames: true
   DisplayStyleGuide: true
@@ -42,7 +43,7 @@ Style/AlignHash:
   #   a:  0
   #   bb: 1
   EnforcedHashRocketStyle: table
-  EnforcedColonStyle: tabl
+  EnforcedColonStyle: table
   EnforcedLastArgumentHashStyle: always_ignore
 
 Style/AlignParameters:
