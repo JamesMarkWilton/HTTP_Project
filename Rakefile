@@ -8,5 +8,5 @@ end
 
 desc "Run RuboCop!"
 task :cop do
-  sh "bundle exec rubocop --fail-fast"
+  sh "bundle exec rubocop"
 end
