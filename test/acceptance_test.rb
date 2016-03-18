@@ -1,15 +1,15 @@
-require 'notes/server' # <-- you'll need to make this
-require 'net/http'  # this is from the stdlib
+require 'notes/server'
+require 'net/http'
 require 'open3'
 
-class Server_AcceptanceTest < Minitest::Test
+class ServerAcceptanceTest < Minitest::Test
   def port
     9292
   end
 
   def run_server(port, app, &block)
     server = Notes::Server.new(app, Port: port, Host: 'localhost')
-    # The thread allows the server to sit and wait for a request, but still return to here so we can send it.
+
     thread = Thread.new do
       Thread.current.abort_on_exception = true
       server.start
@@ -23,7 +23,7 @@ class Server_AcceptanceTest < Minitest::Test
 
   def wait_for(thread)
     loop do
-      break if thread.status == 'sleep' #it is ready for our request
+      break if thread.status == 'sleep'
       raise "The iserver finished without waiting for our request." unless thread.status
       Thread.pass
     end
@@ -35,7 +35,9 @@ class Server_AcceptanceTest < Minitest::Test
     app = Proc.new do |env_hash|
       path_info = env_hash['PATH_INFO']
       body      = "hello, class ^_^"
-      [200, {'Content-Type' => 'text/plain', 'Content-Length' => body.length, 'omg' => 'bbq'}, [body]]
+      [200, {'Content-Type' => 'text/plain',
+             'Content-Length' => body.length,
+             'omg' => 'bbq'}, [body]]
     end
 
     run_server port, app do
@@ -43,7 +45,6 @@ class Server_AcceptanceTest < Minitest::Test
       assert_equal "200",              response.code
       assert_equal 'bbq',              response.header['omg']
       assert_equal "hello, class ^_^", response.body
-      refute_equal "this value should be overridden by the app!", path_info
     end
   end
 
@@ -71,14 +72,13 @@ class Server_AcceptanceTest < Minitest::Test
   end
 end
 
-
-class Notes_AcceptanceTest < Minitest::Test
+class NotesAcceptanceTest < Minitest::Test
   def test_notes_app_runs
     notes_program = File.expand_path('../../bin/notes', __FILE__)
-    stdout, stderr, exitstatus = Open3.capture3(notes_program)
-    assert_match /.*float.*1\.to_f/, stdout
+    output = Open3.capture3(notes_program)
+    assert_match(/.*float.*1\.to_f/, output[0])
 
-    stdout, stderr, exitstatus = Open3.capture3(notes_program, "-h")
-    assert_match /Purpose.*/, stdout
+    output = Open3.capture3(notes_program, "-h")
+    assert_match(/Purpose.*/, output[0])
   end
 end

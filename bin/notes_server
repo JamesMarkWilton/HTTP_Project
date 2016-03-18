@@ -4,6 +4,6 @@ $LOAD_PATH.unshift File.realdirpath("../../lib/notes", __FILE__)
 require 'server'
 require 'app'
 
-server = Notes::Server.new(Notes::App, Host: 'localhost', Port:3100)
+server = Notes::Server.new(Notes::App, Host: 'localhost', Port: 3100)
 server.start
 server.stop

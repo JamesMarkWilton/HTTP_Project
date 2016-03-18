@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<HTML>
+  <body style="font-size: 18px; background-color: black">
+    <table align="center" style="border: 5px; border-color: white">
+      <tr style="border: 5px; color: white">
+        <td><h2>Description</h2></td>
+        <td><h2>Example</h2></td>
+      </tr>
+      <% @notes.each do |note| %>
+      <tr style="color: white">
+        <td style="padding-right: 20px"><%= note["description"] %></td>
+        <td><%= note["example"] %></td>
+      </tr>
+      <% end %>
+    </table>
+  </body>
+</HTML>
+
+

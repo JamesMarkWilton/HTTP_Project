@@ -22,6 +22,7 @@ class Notes
 
     def self.write_response(response, socket)
       socket.write "HTTP/1.1 #{response[0]}\r\n"
+
       response[1].each do |key, value|
         socket.write "#{key}: #{value}\r\n"
       end
@@ -30,38 +31,47 @@ class Notes
       socket.write response[2].join
       socket
     end
+
     def self.get_and_parse_request(socket)
-      env = {}
-      request = ""
+      env = first_line_parse(socket.gets)
 
-      first_line = socket.gets.chomp.split(" ")
-      env.store("REQUEST_METHOD", first_line[0])
-      path = first_line[1].split("?")
-      env.store("PATH_INFO", path[0])
-      env.store("QUERY_STRING", path[1])
-      env.store("SERVER_PROTOCOL", first_line[2])
-
-      until request == "\r\n"
-        if request != ""
-          kv_pair = request.chomp.split(": ")
-
-          if kv_pair[0][/content/i]
-            env.store("#{kv_pair[0].upcase.gsub "-", "_"}", kv_pair[1])
-          else
-            env.store("HTTP_#{kv_pair[0].upcase.gsub "-", "_"}", kv_pair[1])
-          end
-        end
-
-        request = socket.gets
-      end
-
+      env = convert_request(Notes::Server.get(socket), env)
       body = socket.read(env["CONTENT_LENGTH"].to_i)
       env.store("rack.input", StringIO.new(body))
+      Notes::Server.format_notes(env) if env["REQUEST_METHOD"] == "PUT"
+      env
+    end
 
-      server_data = env["HTTP_HOST"].split(":")
-      env.store("SERVER_NAME", server_data[0])
-      env.store("SERVER_PORT", server_data[1])
-      env.store("REQUEST_URI", "http://#{env["HTTP_HOST"]}")
+    def self.first_line_parse(first_line)
+      method, path, protocol = first_line.chomp.split(" ")
+      env = {"REQUEST_METHOD" => method, "SERVER_PROTOCOL" => protocol}
+
+      path, query = path.split("?")
+      env.store("PATH_INFO", path)
+      env.store("QUERY_STRING", query)
+      env
+    end
+
+    def self.get(socket)
+      request = []
+      loop do
+        request << socket.gets
+        break if request[-1] == "\r\n"
+      end
+      request.pop
+      request
+    end
+
+    def self.convert_request(request, env)
+      request.each do |line|
+        key, value = line.split(": ")
+
+        if key[/content/i]
+          env.store(key.upcase.tr("-", "_"), value.chomp)
+        else
+          env.store("HTTP_#{key.upcase.tr("-", "_")}", value.chomp)
+        end
+      end
       env
     end
 
