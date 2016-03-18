@@ -1,6 +1,7 @@
 Notes
 ======
 
+![Travis Logo](https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=0ahUKEwj1iea-scrLAhUqv4MKHb7KAgYQjRwIBw&url=https%3A%2F%2Fblog.wyrihaximus.net%2F2015%2F06%2Ftest-lowest-current-and-highest-possible-on-travis%2F&bvm=bv.117218890,d.amc&psig=AFQjCNH-BdqwpxRu6pElzmxpfj1Mor8mfA&ust=1458393403198159)
 ![Travis Build Status](https://travis-ci.org/JamesMarkWilton/HTTP_Project.svg)
 
 This parses a notes file for sections related to input. It has been set up as both a
