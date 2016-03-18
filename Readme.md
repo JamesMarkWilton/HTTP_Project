@@ -1,6 +1,8 @@
 Notes
 ======
 
+![Travis Build Status](https://travis-ci.org/JamesMarkWilton/HTTP_Project.svg)
+
 This parses a notes file for sections related to input. It has been set up as both a
 command line app and a web app.
 
