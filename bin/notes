@@ -16,9 +16,9 @@ notes = [
   { "description" => "Convert 1 to a float", "example" => "1.to_f # => 3"},
   { "description" => "Concatenate two arrays", "example" => "[1,2] + [2, 3]"},
   { "description" => "Remove elements in second array from first",
-    "example" => "[1,2,4] - [2, 3] # => [1,4]"},
+    "example"     => "[1,2,4] - [2, 3] # => [1,4]"},
   { "description" => "Access an element in an array by its index",
-    "example" =>  "[\"a\",\"b\",\"c\"][0]"},
+    "example"     => "[\"a\",\"b\",\"c\"][0]"},
   { "description" => "Find out how big the array is", "example" => "[\"a\",\"b\"].length # => 2"}
 ]
 

@@ -35,9 +35,9 @@ class ServerAcceptanceTest < Minitest::Test
     app = Proc.new do |env_hash|
       path_info = env_hash['PATH_INFO']
       body      = "hello, class ^_^"
-      [200, {'Content-Type' => 'text/plain',
+      [200, {'Content-Type'   => 'text/plain',
              'Content-Length' => body.length,
-             'omg' => 'bbq'}, [body]]
+             'omg'            => 'bbq'}, [body]]
     end
 
     run_server port, app do
