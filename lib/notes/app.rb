@@ -18,7 +18,7 @@ class Notes
         new_note(env_hash)
       when "/search"
         search(env_hash)
-      when [/.*\/notes.css/]
+      when /.*\/notes.css/
         css_style(env_hash)
       else
         root(env_hash)

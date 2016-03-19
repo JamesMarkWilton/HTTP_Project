@@ -6,11 +6,14 @@ require 'search_notes'
 
 class ServerTest < Minitest::Test
   def test_parses_request_into_env_hash
-    socket = StringIO.new("G / H\r\nHost: l:p\r\nContent-length: 3\r\n\r\nHI!")
+    socket = StringIO.new("G / H\r\nContent-length: 3\r\n\r\nHI!")
     env = Notes::Server.get_and_parse_request socket
 
     assert_equal "G", env["REQUEST_METHOD"]
     assert_equal "/", env["PATH_INFO"]
+    assert_equal "H", env["SERVER_PROTOCOL"]
+    assert_equal "3", env["CONTENT_LENGTH"]
+    assert_equal "HI!", env["rack.input"].string
   end
 
   def test_does_not_read_past_last_char_of_request
@@ -63,6 +66,12 @@ class ServerTest < Minitest::Test
 
     refute_match(/.*Number.*/, response[2][0])
     refute_match(/.*Letter.*/, response[2][0])
+  end
+
+  def test_app_returns_css_stylesheet
+    response = Notes::App::RUN.call("PATH_INFO" => "/notes.css")
+
+    assert_equal "text/css", response[1]["Content-Type"]
   end
 end
 
