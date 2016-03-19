@@ -44,20 +44,20 @@ class ServerTest < Minitest::Test
   end
 
   def test_app_returns_response_array
-    response = Notes::App.call("PATH_INFO" => "/")
+    response = Notes::App::RUN.call("PATH_INFO" => "/")
     assert_equal 200,        response[0]
     assert_match(/<HTML>.*/, response[2][0])
   end
 
   def test_app_returns_searched_notes
-    response = Notes::App.call("QUERY_STRING" => "query=1", "PATH_INFO" => "/search",
+    response = Notes::App::RUN.call("QUERY_STRING" => "query=1", "PATH_INFO" => "/search",
                                "NOTES" => [{"description" => "Number", "example" => "1"},
                                            {"description" => "Letter", "example" => "A"}])
 
     assert_match(/.*Number.*/, response[2][0])
     refute_match(/.*Letter.*/, response[2][0])
 
-    response = Notes::App.call("PATH_INFO" => "/",
+    response = Notes::App::RUN.call("PATH_INFO" => "/",
                                "NOTES" => [{"description" => "Number", "example" => "1"},
                                            {"description" => "Letter", "example" => "A"}])
 

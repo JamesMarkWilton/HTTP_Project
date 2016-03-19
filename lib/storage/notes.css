@@ -1,0 +1,45 @@
+body {
+  background: black;
+  font-size: 20px;
+  font: Courier;
+  text-stroke: 3px red;
+  color: white;
+  text-align: center;
+}
+
+.button {
+  color: white;
+  background: #0000CC;
+  border-color: white;
+}
+
+a {
+  color: #0022DD;
+}
+
+a:hover {
+  color: white;
+}
+
+.table_headlines {
+  color: black;
+  font-family: Fantasy;
+}
+
+.notes_table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.notes_table tr:nth-child(odd) {
+  color: black;
+  background: white;
+  border-style: solid;
+  border-width: 5px;
+  border-color: red;
+}
+
+.notes_table tr:nth-child(even) {
+  color: #780000;
+  background: yellow;
+}

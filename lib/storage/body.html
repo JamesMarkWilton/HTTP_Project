@@ -1,14 +1,17 @@
 <!DOCTYPE HTML>
 <HTML>
-  <body style="font-size: 18px; background-color: black">
-    <table align="center" style="border: 5px; border-color: white">
-      <tr style="border: 5px; color: yellow">
+  <head>
+     <link rel="stylesheet" type="text/css" href="notes.css">
+  </head>
+  <body>
+    <table class="notes_table">
+      <tr class="table_headlines">
         <td><h2>Description</h2></td>
         <td><h2>Example</h2></td>
       </tr>
       <% @notes.each do |note| %>
-      <tr style="color: white">
-        <td style="padding-right: 20px"><%= note["description"] %></td>
+      <tr class="table_elements">
+        <td><%= note["description"] %></td>
         <td><%= note["example"] %></td>
       </tr>
       <% end %>

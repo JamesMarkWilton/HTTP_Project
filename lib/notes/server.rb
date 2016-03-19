@@ -20,6 +20,10 @@ class Notes
       end
     end
 
+    def stop
+      server.close
+    end
+
     def self.write_response(response, socket)
       socket.write "HTTP/1.1 #{response[0]}\r\n"
 
@@ -73,10 +77,6 @@ class Notes
         end
       end
       env
-    end
-
-    def stop
-      server.close
     end
   end
 end
