@@ -1,9 +1,10 @@
 body {
-  background: black;
-  font-size: 20px;
-  font: Courier;
+  background-image: url("http://cdn.shopify.com/s/files/1/0023/2122/products/ROLLBAHN.NOTEBOOK.YELLOW.ALT3_1024x1024.jpg?v=1453503270");
+  background-repeat: no-repeat;
+  background-size: 100%;
+  font-size: 25px;
+  font: Comic;
   text-stroke: 3px red;
-  color: white;
   text-align: center;
 }
 
@@ -21,25 +22,18 @@ a:hover {
   color: white;
 }
 
-.table_headlines {
-  color: black;
-  font-family: Fantasy;
-}
-
 .notes_table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-.notes_table tr:nth-child(odd) {
-  color: black;
-  background: white;
-  border-style: solid;
-  border-width: 5px;
-  border-color: red;
+  width: 98%;
 }
 
 .notes_table tr:nth-child(even) {
-  color: #780000;
-  background: yellow;
+  color: #006699;
+}
+
+.notes_table tr:nth-child(odd) {
+  color: #CC0000;
+}
+
+.table_headlines {
+  color: black;
 }

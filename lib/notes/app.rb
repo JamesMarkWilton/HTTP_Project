@@ -14,12 +14,16 @@ class Notes
       @notes = env_hash["NOTES"] || DATA
 
       case env_hash["PATH_INFO"]
+
       when "/notes/new"
         new_note(env_hash)
-      when "/search"
+
+      when /.*\/search/
         search(env_hash)
+
       when /.*\/notes.css/
         css_style(env_hash)
+
       else
         root(env_hash)
       end

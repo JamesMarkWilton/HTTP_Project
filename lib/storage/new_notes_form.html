@@ -4,10 +4,11 @@
      <link rel="stylesheet" type="text/css" href="notes.css">
   </head>
     <body>
-      <form action="search" method="post">
+      <form action="search" method="get">
         <p><h2>Add Your Notes</h2></p>
-        <p><input type="text" name="description" placeholder="Enter a note description"></p>
-        <p><input type="text" name="example" placeholder="Enter a note example"></p>
+        <textarea rows="10" cols="25">"Enter a description per line"</textarea>
+        <textarea rows="10" cols="25">"Enter an example per line"</textarea>
+        <p><input type="text" name="query" placeholder="Enter a word or words"></p>
         <p><input class="button"; type="submit" value="Submit Notes"></p>
       </form>
       <br>
