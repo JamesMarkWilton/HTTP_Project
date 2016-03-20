@@ -87,7 +87,7 @@ class Notes
       body.each_with_index do |body_part, index|
         if body_part[/.*query.*/]
           env["QUERY_STRING"] = body_part
-          body.delete_at[index]
+          body.delete_at(index)
         end
       end
       env.store("BODY", body)
