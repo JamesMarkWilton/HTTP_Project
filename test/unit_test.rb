@@ -13,15 +13,15 @@ class ServerTest < Minitest::Test
     assert_equal "/", env["PATH_INFO"]
     assert_equal "H", env["SERVER_PROTOCOL"]
     assert_equal "3", env["CONTENT_LENGTH"]
-    assert_equal "HI!", env["rack.input"].string
+    assert_equal "HI!", env["BODY"][0]
   end
 
   def test_does_not_read_past_last_char_of_request
     socket = StringIO.new("G /search H\r\nHost: l:p\r\nContent-length: 3\r\n\r\nHI!")
     env = Notes::Server.get_and_parse_request socket
 
-    assert_equal "HI!", env["rack.input"].read
-    assert_equal nil, env["rack.input"].read[4]
+    assert_equal "HI!", env["BODY"][0]
+    assert_equal nil, env["BODY"][1]
   end
 
   def test_pulls_out_query_string_from_path_if_there_is_one
@@ -48,23 +48,18 @@ class ServerTest < Minitest::Test
 
   def test_app_returns_response_array
     response = Notes::App::RUN.call("PATH_INFO" => "/")
+
     assert_equal 200,        response[0]
     assert_match(/<HTML>.*/, response[2][0])
   end
 
   def test_app_returns_searched_notes
-    response = Notes::App::RUN.call("QUERY_STRING" => "query=1", "PATH_INFO" => "/search",
-                               "NOTES" => [{"description" => "Number", "example" => "1"},
-                                           {"description" => "Letter", "example" => "A"}])
+    response = Notes::App::RUN.call("PATH_INFO" => "/search",
+                                    "QUERY_STRING" => "query=1",
+                                    "BODY" => ["description=%0D%0ANumber",
+                                               "example=%0D%0A1"])
 
     assert_match(/.*Number.*/, response[2][0])
-    refute_match(/.*Letter.*/, response[2][0])
-
-    response = Notes::App::RUN.call("PATH_INFO" => "/",
-                               "NOTES" => [{"description" => "Number", "example" => "1"},
-                                           {"description" => "Letter", "example" => "A"}])
-
-    refute_match(/.*Number.*/, response[2][0])
     refute_match(/.*Letter.*/, response[2][0])
   end
 

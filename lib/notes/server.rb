@@ -39,10 +39,13 @@ class Notes
     def self.get_and_parse_request(socket)
       env = first_line_parse(socket.gets)
 
-      env = convert_request(Notes::Server.get(socket), env)
-      body = socket.read(env["CONTENT_LENGTH"].to_i)
-      env.store("rack.input", StringIO.new(body))
-      Notes::Server.format_notes(env) if env["REQUEST_METHOD"] == "PUT"
+      if env["REQUEST_METHOD"] == "GET"
+        env = convert_request(Notes::Server.get(socket), env)
+      else
+        env = convert_request(Notes::Server.get(socket), env)
+        body = socket.read(env["CONTENT_LENGTH"].to_i)
+        env = Notes::Server.parse_body(body, env)
+      end
       env
     end
 
@@ -76,6 +79,18 @@ class Notes
           env.store("HTTP_#{key.upcase.tr("-", "_")}", value.chomp)
         end
       end
+      env
+    end
+
+    def self.parse_body(body, env)
+      body = body.split("&")
+      body.each_with_index do |body_part, index|
+        if body_part[/.*query.*/]
+          env["QUERY_STRING"] = body_part
+          body.delete_at[index]
+        end
+      end
+      env.store("BODY", body)
       env
     end
   end

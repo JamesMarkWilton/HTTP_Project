@@ -11,7 +11,8 @@ require_relative 'server'
 class Notes
   class App
     RUN = Proc.new do |env_hash|
-      @notes = env_hash["NOTES"] || DATA
+      @notes = DATA
+      @notes = Notes::App.convert_body(env_hash["BODY"]) if env_hash["BODY"]
 
       case env_hash["PATH_INFO"]
 
@@ -60,6 +61,30 @@ class Notes
       env_hash.store("Content-Type", "text/html")
       env_hash.store("Content-Length", body.length)
       [200, env_hash, [body]]
+    end
+
+    def self.convert_body(body)
+      keys, values = [], []
+
+      body.each do |parse_me|
+        key, value = parse_me.split("=")
+        keys << key
+        values << value.tr("+", " ").split("%0D%0A")
+      end
+
+      Notes::App.notes_hash_builder(keys, values)
+    end
+
+    def self.notes_hash_builder(keys, values)
+      notes = []
+
+      keys.each_with_index do |key, key_index|
+        values[key_index].each_with_index do |note, value_index|
+          notes << {key => note} if key == "description"
+          notes[value_index].store(key, note) if key != "description"
+        end
+      end
+      notes
     end
   end
 end
