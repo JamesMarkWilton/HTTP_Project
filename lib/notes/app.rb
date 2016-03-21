@@ -80,7 +80,7 @@ class Notes
 
       keys.each_with_index do |key, key_index|
         values[key_index].each_with_index do |note, value_index|
-          notes << {key => note} if key == "description"
+          notes << {key => note} if key_index == 0
           notes[value_index].store(key, note) if key != "description"
         end
       end
